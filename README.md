@@ -8,6 +8,11 @@ This repository is the source code of main api of CerviCam app. The core is buil
 - [Activate Local Environment](#activate-local-environment)
 - [Add and Install Packages](#add-and-install-packages)
 - [Usage](#usage)
+- [API Documentation](#api-documentation)
+    - [Postman Collections](#postman-collections)
+    - [Authentication and Authorization](#authentication-and-authorization)
+        - [Token](#token)
+        - [API Key](#api-key)
 - [Troubleshootings](#troubleshootings)
 - [Acknowledgments](#acknowledgments)
 
