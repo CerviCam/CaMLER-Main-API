@@ -137,6 +137,30 @@ Ensure you already activated the local environment from [this section](#activate
     ```bash
     python manage.py createsuperuser
     ```
+## **API Documentation**
+- ### **Postman Collection**
+    The collection can be seen on this [site](https://documenter.getpostman.com/view/7487357/T1DmDyKV). If you use Postman, you can import the collection from that link. I recommend you to import it from Postman for better use and understanding rather than test it directly from your mobile application or web application. To use the environment variables on your local, take a look the example that exists on that site.
+
+- ### **Authentication and Authorization**
+    In order to use all services, you need to have **Token for authentication** and **API Key for authorization**.
+    - ### **Token**
+        To get your token, you must exchange it by sending your account (username and password) to server, use *Get token request* on Postman to request that. Once you get the response with status code 200, you will see your token on response body. Take your token and put it on header as the following format:
+        ```
+        Authorization: Token [YOUR_TOKEN]
+        ```
+        In general type of request that needs token are:
+        **POST**, **UPDATE**, **DELETE**. But for POST requests, some of them are exceptional, e.g Token Request or Create user request that needs body request (POST type), but doesn't need token since you could use those requests anonymously.
+
+        **Need to be noted**, if you use our Postman collections, you only need to provide username and password to send a token request, there is no need to set the token to header after have a OK response from server because our collections already setted it automatically for you after you get token.
+    - ### **API Key**
+        For API key, you could generate it only once on admin page, and you must note the API key because you will have no chance to see it again after you refresh the page. Of course you can delete and create new one as you like, please use it wisely. Once you have your own API key, put it on your request header as the following format:
+        ```
+        Api-Key: [YOUR_API_KEY]
+        ```
+
+        **Need to be noted**, you definitely must provide API Key on your request header for any services you want to use.
+
+
 ## **Troubleshootings**
 
 ## **Acknowledgements**
