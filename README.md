@@ -41,6 +41,7 @@ CerviCam
 │   ├── settings.py                 <- Allowed host, secret key, database, timezone, etc
 │   ├── urls.py                     <- Root urls, this will connect to apps.urls.py
 │   ├── ...                         <- For the rest files, you should go further look at Django documentation
+│
 ├── .env                            <- Local variables
 ├── env                             <- Local environment, where all installed packages will be stored
 ├── requirements.txt                <- All required packages are defined in here
@@ -87,9 +88,9 @@ Follow all these instructions if this is the first time you pull/fork this repos
 
     | Variable          | Optional | Value                                                                             |
     |-------------------|-------------|-----------------------------------------------------------------------------------|
-    | DEBUG             | No          | Either **True** or **False**                                                              |
+    | DEBUG             | No          | Either **1** or **0**                                                              |
     | DBMS              | No          | Either **SQLITE3** or **POSTGRESQL**                                                      |
-    | DATABASE_NAME     | Yes         | Create database on POSTGRESQL with any name you want and set it to this variable  |
+    | DATABASE_NAME     | Yes         | Set targeted database on POSTGRESQL  |
     | DATABASE_USER     | Yes         | User's name to access the database on POSTGRESQL                                  |
     | DATABASE_PASSWORD | Yes         | User's password to access the database on POSTGRESQL                              |
     | DATABASE_HOST     | Yes         | The host of POSGRESQL server                                                      |
@@ -118,7 +119,7 @@ Activate your local environment from [this section](#activate-local-environment)
         ```bash
         Django==3.0.8
         ```
-    2. Finally, install all packages from requirements.txt
+    2. Finally, install all packages after you added it to requirements.txt
        ```bash
        pip install -r requirements.txt
        ```
