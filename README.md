@@ -65,6 +65,7 @@ Follow all these instructions if this is the first time you pull/fork this repos
 2. Create **.env** file in the root of project/repository and fill in these variables:
     ```bash
     DEBUG=
+    ALLOWED_HOSTS=
     DBMS=
     DATABASE_NAME=
     DATABASE_USER=
@@ -76,6 +77,7 @@ Follow all these instructions if this is the first time you pull/fork this repos
     e.g:
     ```bash
     DEBUG=True
+    ALLOWED_HOSTS=locahost,127.0.0.1
     DBMS=POSTGRESQL
     DATABASE_NAME=cervicam
     DATABASE_USER=cervicam_user
@@ -89,7 +91,8 @@ Follow all these instructions if this is the first time you pull/fork this repos
     | Variable          | Optional    | Value                                                                             |
     |-------------------|-------------|-----------------------------------------------------------------------------------|
     | DEBUG             | No          | Either **1** or **0**                                                             |
-    | DBMS              | No          | Either **SQLITE3** or **POSTGRESQL**                                              |
+    | ALLOWED_HOSTS     | Yes         | List of allowed hosts and separated by comma, the default is '*' means all hosts  |
+    | DBMS              | Yes         | Either **SQLITE3** or **POSTGRESQL**, the default is **SQLITE3**                  |
     | DATABASE_NAME     | Yes         | Set targeted database, ensure you have created on your DBMS                       |
     | DATABASE_USER     | Yes         | User's name to access the database                                                |
     | DATABASE_PASSWORD | Yes         | User's password to access the database                                            |

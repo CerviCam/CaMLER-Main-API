@@ -29,7 +29,7 @@ SECRET_KEY = 've*v62y$*q=n22*xt9*g97wv4&6mk^ipak=*xz@%-x+!l*g(*%'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = bool(int(os.getenv('DEBUG', 1)))
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '*').split(',')
 
 
 # Application definition
@@ -95,10 +95,7 @@ WSGI_APPLICATION = 'cervicam.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
-DBMS = os.getenv('DBMS', None)
-print(DBMS)
-print(os.getenv('DATABASE_NAME'))
-print(os.getenv('DATABASE_USER'))
+DBMS = os.getenv('DBMS', 'SQLITE3')
 if DBMS == "POSTGRESQL":
     DATABASES = {
         'default': {
@@ -110,7 +107,7 @@ if DBMS == "POSTGRESQL":
             'PORT': os.getenv('DATABASE_PORT'),
         }
     }
-else:
+else if DBMS == 'SQLITE3':
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
