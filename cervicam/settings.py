@@ -96,6 +96,9 @@ WSGI_APPLICATION = 'cervicam.wsgi.application'
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
 DBMS = os.getenv('DBMS', None)
+print(DBMS)
+print(os.getenv('DATABASE_NAME'))
+print(os.getenv('DATABASE_USER'))
 if DBMS == "POSTGRESQL":
     DATABASES = {
         'default': {
