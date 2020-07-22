@@ -9,12 +9,12 @@ This repository is the source code of main api of CerviCam app. The core is buil
 - [Add and Install Packages](#add-and-install-packages)
 - [Usage](#usage)
 - [API Documentation](#api-documentation)
-    - [Postman Collections](#postman-collections)
+    - [Postman Collection](#postman-collection)
     - [Authentication and Authorization](#authentication-and-authorization)
         - [Token](#token)
         - [API Key](#api-key)
 - [Troubleshootings](#troubleshootings)
-- [Acknowledgments](#acknowledgments)
+- [Acknowledgements](#acknowledgements)
 
 ## **Code structure**
 ```
@@ -53,7 +53,7 @@ Install the following packages/tools:
 - **Python v3.7.7** - Since django uses python to run.
 
 For DBMS you could choose one of these following options:
-- **Sqlite3** - You will not install anything if you choose this option, by default django will provide it for you.
+- **Sqlite3** - You will not install anything for database if you choose this option, by default django will provide it for you.
 - **Postgresql v10.12** - **Recommended** for performance reason.
 
 ## **Setup**
@@ -86,15 +86,16 @@ Follow all these instructions if this is the first time you pull/fork this repos
 
     Full documentation of **.env** file:
 
-    | Variable          | Optional | Value                                                                             |
+    | Variable          | Optional    | Value                                                                             |
     |-------------------|-------------|-----------------------------------------------------------------------------------|
-    | DEBUG             | No          | Either **1** or **0**                                                              |
-    | DBMS              | No          | Either **SQLITE3** or **POSTGRESQL**                                                      |
-    | DATABASE_NAME     | Yes         | Set targeted database on POSTGRESQL  |
-    | DATABASE_USER     | Yes         | User's name to access the database on POSTGRESQL                                  |
-    | DATABASE_PASSWORD | Yes         | User's password to access the database on POSTGRESQL                              |
-    | DATABASE_HOST     | Yes         | The host of POSGRESQL server                                                      |
+    | DEBUG             | No          | Either **1** or **0**                                                             |
+    | DBMS              | No          | Either **SQLITE3** or **POSTGRESQL**                                              |
+    | DATABASE_NAME     | Yes         | Set targeted database, ensure you have created on your DBMS                       |
+    | DATABASE_USER     | Yes         | User's name to access the database                                                |
+    | DATABASE_PASSWORD | Yes         | User's password to access the database                                            |
+    | DATABASE_HOST     | Yes         | The host of database server                                                       |
     | DATABASE_PORT     | Yes         | The port that used by the host                                                    |
+
 After you done, activate your local environment by following instructions that defined in [here](#activate-local-environment) and also you need to install all required packages by calling commands that defined in [here](#add-and-install-environment)
 
 ## **Activate Local Environment**
