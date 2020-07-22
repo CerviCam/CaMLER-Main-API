@@ -107,7 +107,7 @@ if DBMS == "POSTGRESQL":
             'PORT': os.getenv('DATABASE_PORT'),
         }
     }
-else if DBMS == 'SQLITE3':
+elif DBMS == 'SQLITE3':
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
