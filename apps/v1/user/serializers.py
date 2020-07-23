@@ -49,6 +49,15 @@ class AccountSerializer(serializers.ModelSerializer):
             }
         }
 
+    def create(self, validated_data):
+        user = self.Meta.model.objects.create(
+            username = validated_data['username'],
+        )
+        user.set_password(validated_data['password'])
+        user.save()
+
+        return user
+
 class UserSerializer(serializers.ModelSerializer):
     degree = DegreeSerializer(many = False)
     workplace = PlaceSerializer(many = False)

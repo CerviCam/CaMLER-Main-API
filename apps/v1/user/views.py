@@ -9,12 +9,13 @@ from rest_framework.authtoken.models import Token
 from rest_framework.decorators import api_view
 
 from apps.v1.common.pagination import DefaultLimitOffsetPagination
-from apps.v1.user import serializers, models
+from apps.v1.user import serializers, models, permissions
 
 # Create your views here.
 class UserViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.UserSerializer
     queryset = models.User.objects.all()
+    permission_classes = [permissions.UserPermission]
 
     filter_backends = [
         DjangoFilterBackend,
