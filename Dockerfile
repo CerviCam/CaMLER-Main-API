@@ -1,4 +1,4 @@
-FROM python:3.7-alpine
+FROM python:3.7
 ENV PYTHONUNBUFFERED 1
 
 RUN mkdir /app
@@ -8,6 +8,3 @@ ADD manage.py /app/manage.py
 ADD requirements.txt /app/requirements.txt
 WORKDIR /app
 RUN pip install -r requirements.txt
-
-RUN adduser -D tempuser
-USER tempuser
