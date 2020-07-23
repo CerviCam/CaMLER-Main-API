@@ -7,6 +7,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.authtoken.models import Token
 from rest_framework.decorators import api_view
+from rest_framework_api_key.permissions import HasAPIAccess
 
 from apps.v1.common.pagination import DefaultLimitOffsetPagination
 from apps.v1.user import serializers, models, permissions
@@ -15,7 +16,10 @@ from apps.v1.user import serializers, models, permissions
 class UserViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.UserSerializer
     queryset = models.User.objects.all()
-    permission_classes = [permissions.UserPermission]
+    permission_classes = [
+        HasAPIAccess,
+        permissions.UserPermission,
+    ]
 
     filter_backends = [
         DjangoFilterBackend,
