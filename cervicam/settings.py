@@ -34,8 +34,6 @@ ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '*').split(',')
 
 # Application definition
 
-API_KEY_CUSTOM_HEADER = "HTTP_X_API_KEY"
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
