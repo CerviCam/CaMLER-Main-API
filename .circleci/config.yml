@@ -1,17 +1,30 @@
 version: 2.1
 
+
 jobs:
     build:
         machine: true
         steps:
             - checkout
-            - run: docker build . -t "cervicam/main-api:latest"
-            - run: docker push cervicam/main-api:latest
+            - run:
+                name: Build a production image
+                command: docker build . -t $IMAGE_PRODUCTION
 
     deploy:
         machine: true
         steps:
+            - run:
+                name: Accessing Docker Hub
+                command: docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWORD
+            - run:
+                name: Publish the image to Docker Hub
+                command: docker push $IMAGE_PRODUCTION
+
+    run:
+        machine: true
+        steps:
             - run: checkout
-            - run: docker pull cervicam/main-api:latest
-            - run: cd cervicam
+            - run: ssh $VM_USERNAME@$VM_HOST
+            - run: docker pull $IMAGE_PRODUCTION
+            - run: cd ./cervicam/production
             - run: docker-compose restart
