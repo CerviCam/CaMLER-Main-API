@@ -43,10 +43,7 @@ jobs:
         steps:
             - run: 
                 name: Pull and Run Application
-                command: |
-                    ssh ${VM_USERNAME}@${VM_HOST} \<< EOF
-                        sudo systemctl restart app@production
-                    EOF
+                command: ssh ${VM_USERNAME}@${VM_HOST} "sudo systemctl restart apps@production"
 
 workflows:
     version: 2
