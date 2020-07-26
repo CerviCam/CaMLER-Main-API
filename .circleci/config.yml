@@ -1,19 +1,38 @@
 version: 2.1
 
+executors:
+    - app-builder:
+        docker:
+            - image: circleci/buildpack-deps:stretch
+
 jobs:
     build:
-        machine: true
+        executor: app-builder
         steps:
             - checkout
+            - setup_remote_docker
             - run:
                 name: Build a production image
                 command: docker build . -t $IMAGE_PRODUCTION
+            - run:
+                name: Archieve a production image
+                command: docker save -o image.tar $IMAGE_PRODUCTION
+            - persist_to_workspace:
+                root: .
+                paths:
+                    - ./image.tar
 
     deploy:
-        machine: true
+        executor: app-builder
         steps:
+            - attach_workspace:
+                at: /tmp/workspace
+            - setup_remote_docker
             - run:
-                name: Accessing Docker Hub
+                name: Load archived production image
+                command: docker load -i /tmp/workspace/image.tar
+            - run:
+                name: Authenticate Docker Hub
                 command: docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWORD
             - run:
                 name: Publish the image to Docker Hub
@@ -22,7 +41,6 @@ jobs:
     run:
         machine: true
         steps:
-            - run: checkout
             - run: ssh $VM_USERNAME@$VM_HOST
             - run: docker pull $IMAGE_PRODUCTION
             - run: cd ./cervicam/production
@@ -39,12 +57,16 @@ workflows:
                             - master
         
             - deploy:
+                requires:
+                    - build
                 filters:
                     branches:
                         only:
                             - master
             
             - run:
+                requires:
+                    - deploy
                 filters:
                     branches:
                         only:
