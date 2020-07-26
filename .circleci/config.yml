@@ -33,7 +33,7 @@ jobs:
                 command: docker load -i /tmp/workspace/image.tar
             - run:
                 name: Authenticate Docker Hub
-                command: docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWORD
+                command: echo "$DOCKER_HUB_PASSWORD" | docker login -u $DOCKER_HUB_USERNAME --password-stdin
             - run:
                 name: Publish the image to Docker Hub
                 command: docker push $IMAGE_PRODUCTION
