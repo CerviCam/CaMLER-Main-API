@@ -45,9 +45,7 @@ jobs:
                 name: Pull and Run Application
                 command: |
                     ssh ${VM_USERNAME}@${VM_HOST} \<< EOF
-                        docker pull $IMAGE_PRODUCTION
-                        cd ./cervicam/production
-                        docker-compose restart
+                        sudo systemctl restart app@production
                     EOF
 
 workflows:
