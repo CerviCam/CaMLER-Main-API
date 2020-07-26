@@ -31,9 +31,17 @@ DEBUG = bool(int(os.getenv('DEBUG', 1)))
 
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '*').split(',')
 
+APIS = {
+    'MAIN': {
+        'DOMAIN': os.getenv('MAIN_API_DOMAIN', 'http://localhost:8000')
+    },
+    'AI': {
+        'DOMAIN': os.getenv('AI_API_DOMAIN', 'http://localhost:2020')
+    }
+}
+
 
 # Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -47,6 +55,7 @@ INSTALLED_APPS = [
     'django_filters',
     'apps.v1.common',
     'apps.v1.user',
+    'apps.v1.cervic_model',
 ]
 
 MIDDLEWARE = [
@@ -62,6 +71,7 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'cervicam.urls'
 
 REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'apps.v1.common.pagination.DefaultLimitOffsetPagination',
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
     ],
@@ -80,6 +90,7 @@ TEMPLATES = [
             'context_processors': [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
+                'django.template.context_processors.media',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
@@ -151,3 +162,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# Serve image or video files
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.getenv('MEDIA_PATH', os.path.join(BASE_DIR, 'media'))

@@ -9,7 +9,6 @@ from rest_framework.authtoken.models import Token
 from rest_framework.decorators import api_view
 from rest_framework_api_key.permissions import HasAPIAccess
 
-from apps.v1.common.pagination import DefaultLimitOffsetPagination
 from apps.v1.user import serializers, models, permissions
 
 # Create your views here.
@@ -52,7 +51,6 @@ class UserViewSet(viewsets.ModelViewSet):
         "created_at",
     ]
 
-    pagination_class = DefaultLimitOffsetPagination
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
 def create_auth_token(sender, instance = None, created = False, **kwargs):

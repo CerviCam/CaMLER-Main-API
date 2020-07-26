@@ -1,6 +1,21 @@
-def set_prefix_to_key_on_dict(prefix, dict_data):
-    new_dict_data = dict()
-    for key in dict_data.keys():
-        new_dict_data[prefix + key] = dict_data[key]
+from urllib import parse
+from urllib.request import urlopen, Request
 
-    return new_dict_data
+def fetch(
+    url,
+    headers = {},
+    body = {},
+    method = 'GET',
+):
+    headers = {} if headers == None else headers
+    data = parse.urlencode(body).encode()
+    return urlopen(Request(
+        url=url,
+        headers={
+            'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.76 Safari/537.36',
+            **headers,
+        },
+        data = data,
+        method = method,
+    )).read().decode()
+
