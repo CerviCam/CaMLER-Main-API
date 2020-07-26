@@ -1,0 +1,17 @@
+version: 2.1
+
+jobs:
+    build:
+        machine: true
+        steps:
+            - checkout
+            - run: docker build . -t "cervicam/main-api:latest"
+            - run: docker push cervicam/main-api:latest
+
+    deploy:
+        machine: true
+        steps:
+            - run: checkout
+            - run: docker pull cervicam/main-api:latest
+            - run: cd cervicam
+            - run: docker-compose restart
