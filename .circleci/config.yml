@@ -41,10 +41,14 @@ jobs:
     run:
         machine: true
         steps:
-            - run: ssh ${VM_USERNAME}@${VM_HOST}
-            - run: docker pull $IMAGE_PRODUCTION
-            - run: cd ./cervicam/production
-            - run: docker-compose restart
+            - run: 
+                name: Pull and Run Application
+                command: |
+                    ssh ${VM_USERNAME}@${VM_HOST} << EOF
+                        docker pull $IMAGE_PRODUCTION
+                        cd ./cervicam/production
+                        docker-compose restart
+                    EOF
 
 workflows:
     version: 2
