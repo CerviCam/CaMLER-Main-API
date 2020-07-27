@@ -42,8 +42,8 @@ jobs:
         machine: true
         steps:
             - run: 
-                name: Pull and Run Application
-                command: ssh ${VM_USERNAME}@${VM_HOST} "sudo systemctl restart apps@production"
+                name: Reload Application
+                command: ssh ${VM_USERNAME}@${VM_HOST} "sudo systemctl reload cervicam@production"
 
 workflows:
     version: 2
