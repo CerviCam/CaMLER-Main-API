@@ -25,7 +25,7 @@ class ClassificationViewSet(viewsets.ModelViewSet):
 
         if serializer.is_valid():
             classification = serializer.save()
-            # send_classification_request(classification)
+            send_classification_request(classification)
             return Response(serializer.data, status = status.HTTP_200_OK)
         else:
             return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
@@ -44,6 +44,8 @@ def send_classification_request(instance):
             'image_url': settings.APIS['MAIN']['DOMAIN'] + instance.image.url,
         }
     )
+
+    print(response)
     
     instance.status = models.CervicClassification.Status.DONE
     instance.save()
