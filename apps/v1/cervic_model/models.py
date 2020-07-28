@@ -66,5 +66,5 @@ def pre_save_cervic_classification(sender, instance, *args, **kwargs):
         return False
         
     old_image_path = old_instance.image.path
-    if old_instance.image != instance.image and os.path.isfile(old_instance.image.path):
+    if old_instance.image != instance.image and os.path.isfile(old_image_path):
         os.remove(old_image_path)
