@@ -43,7 +43,7 @@ jobs:
         steps:
             - run: 
                 name: Reload Application
-                command: ssh ${VM_USERNAME}@${VM_HOST} "sudo systemctl reload cervicam@production"
+                command: ssh ${VM_USERNAME}@${VM_HOST} "sudo systemctl restart cervicam@production"
 
 workflows:
     version: 2
