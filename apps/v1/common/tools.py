@@ -21,3 +21,10 @@ def fetch(
         method = method,
     )).read().decode()
 
+def get_user_or_none(request):
+    if request.user.is_authenticated:
+        account = request.user
+        user = account.user
+        return user
+    else:
+        return None
