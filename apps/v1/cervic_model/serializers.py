@@ -31,5 +31,6 @@ class CervicSerializer(serializers.ModelSerializer):
         }
 
     def save(self):
-        user = User.objects.get(account = self.context.get('request').user)
+        account = self.context.get('request').user
+        user = account.user
         return super(CervicSerializer, self).save(creator = user)

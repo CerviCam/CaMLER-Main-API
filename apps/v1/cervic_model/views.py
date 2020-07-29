@@ -17,7 +17,8 @@ class ClassificationViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated, HasAPIAccess]
 
     def get_queryset(self):
-        user = User.objects.get(account = self.request.user)
+        account = self.request.user 
+        user = account.user
         return models.CervicClassification.objects.filter(creator = user)
 
     def create(self, request, *args, **kwargs):
