@@ -21,32 +21,30 @@ class CervicClassification(BaseModel):
     creator = models.ForeignKey(User, on_delete = models.SET_NULL, null = True)
     image = models.ImageField(upload_to = set_image_path)
     
-    class Status(models.TextChoices):
-        WAITING = 'WAITING', _('Waiting')
-        DONE = 'DONE', _('Done')
-    status = models.CharField(
-        max_length = 10,
+    class Status(models.IntegerChoices):
+        WAITING = 0, _('Waiting')
+        DONE = 1, _('Done')
+    status = models.IntegerField(
         choices = Status.choices,
         default = Status.WAITING,
     )
 
-    class Result(models.TextChoices):
-        POSITIVE = 'POSITIVE', _('Positive')
-        NEGATIVE = 'NEGATIVE', _('Negative')
-        UNCLASSIFIED = 'UNCLASSIFIED', _('Unclassified')
-        UNKNOWN = 'UNKNOWN', _('Unknown')
-    result = models.CharField(
-        max_length = 20,
+    class Result(models.IntegerChoices):
+        UNCLASSIFIED = 0, _('Unclassified')
+        NEGATIVE = 1, _('Negative')
+        POSITIVE = 2, _('Positive')
+        UNKNOWN = 3, _('Unknown')
+    result = models.IntegerField(
         choices = Result.choices,
         default = Result.UNCLASSIFIED,
     )
 
     def __str__(self):
-        identity_name = os.path.basename(self.image.path)
+        identity_name = os.path.basename(self.image.url)
         if self.creator != None:
             identity_name = self.creator.name
 
-        return "{} [{}] [{}]".format(identity_name, self.status, self.result)
+        return "{} [{}] [{}]".format(identity_name, self.get_status_display(), self.get_result_display())
 
 @receiver(post_delete, sender = CervicClassification)
 def delete_cervic_classification(sender, instance, *args, **kwargs):

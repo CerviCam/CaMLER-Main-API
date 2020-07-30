@@ -14,11 +14,10 @@ from apps.v1.cervic_model import serializers, models
 class ClassificationViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.CervicSerializer
     queryset = models.CervicClassification.objects.all()
-    permission_classes = [IsAuthenticated, HasAPIAccess]
+    permission_classes = [HasAPIAccess, IsAuthenticated]
 
     def get_queryset(self):
-        account = self.request.user 
-        user = account.user
+        user = tools.get_user_or_none(self.request)
         return models.CervicClassification.objects.filter(creator = user)
 
     def create(self, request, *args, **kwargs):
