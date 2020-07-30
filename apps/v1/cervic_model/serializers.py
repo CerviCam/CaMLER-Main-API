@@ -4,8 +4,6 @@ from apps.v1.cervic_model import models
 from apps.v1.user.models import User
 
 class CervicSerializer(serializers.ModelSerializer):
-    image = Base64ImageField()
-
     class Meta:
         model = models.CervicClassification
         fields = (
@@ -19,6 +17,9 @@ class CervicSerializer(serializers.ModelSerializer):
         )
         depth = 1
         extra_kwargs = {
+            'image': {
+                'write_only': True,
+            },
             'creator': {
                 'read_only': True,
             },
@@ -37,6 +38,7 @@ class CervicSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance, *args, **kwargs):
         representation = {
+            'image_url': self.context.get('request').build_absolute_uri(instance.image.url),
             'creator': {
                 'id': instance.creator.id,
                 'name': instance.creator.name,
