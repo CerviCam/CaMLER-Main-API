@@ -34,3 +34,20 @@ class CervicSerializer(serializers.ModelSerializer):
         account = self.context.get('request').user
         user = account.user
         return super(CervicSerializer, self).save(creator = user)
+
+    def to_representation(self, instance, *args, **kwargs):
+        representation = {
+            'status': {
+                'code': instance.status,
+                'label': instance.get_status_display(),
+            },
+            'result': {
+                'code': instance.result,
+                'label': instance.get_result_display(),
+            },
+        }
+
+        return {
+            **super().to_representation(instance, *args, **kwargs),
+            **representation,
+        }
