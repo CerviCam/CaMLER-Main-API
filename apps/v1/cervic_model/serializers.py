@@ -37,6 +37,10 @@ class CervicSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance, *args, **kwargs):
         representation = {
+            'creator': {
+                'id': instance.creator.id,
+                'name': instance.creator.name,
+            },
             'status': {
                 'code': instance.status,
                 'label': instance.get_status_display(),
