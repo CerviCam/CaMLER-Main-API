@@ -1,11 +1,11 @@
 # CerviCam - Main API
-This repository is the source code of main api of CerviCam app. The core is built by RESTful API and Django framework.
+This API is used as the main service of CerviCam apps and also as the only one gateway for our other services that's not implemented in here. The core is built by RESTful API and Django framework.
 
 ## **Table of Contents**
 - [Prerequisites](#prerequisites)
-- [Code structure](#structure)
+- [File structure](#file-structure)
 - [Setup](#setup)
-- [Activate Local Environment](#activate-local-environment)
+- [Activate/Deactivate Local Environment](#activate/deactivate-local-environment)
 - [Add and Install Packages](#add-and-install-packages)
 - [Usage](#usage)
 - [API Documentation](#api-documentation)
@@ -16,14 +16,14 @@ This repository is the source code of main api of CerviCam app. The core is buil
 - [Troubleshootings](#troubleshootings)
 - [Acknowledgements](#acknowledgements)
 
-## **Code structure**
+## **File structure**
 ```
-CerviCam
+Main-API
 ├── apps
 │   ├── v1                          <- API version 1                                 
 │   │   ├── app1                    <- App 1 on version 1
 │   │   │   ├── models.py           <- Where database models for app1 will be defined
-│   │   │   ├── admin.py            <- How you control and define your database model on admin page
+│   │   │   ├── admin.py            <- How you control/manage your database model on admin page
 │   │   │   ├── serializers.py      <- Serializer and deserializer of all your model on app1
 │   │   │   ├── urls.py             <- Map all endpoints to handler from views.py
 │   │   │   ├── views.py            <- Handlers of all endpoints that defined on urls.py
@@ -52,7 +52,7 @@ Install the following packages/tools:
 - **Git** - You need this tool for managing the repository codes.
 - **Python v3.7.7** - Since django uses python to run.
 
-For DBMS you could choose one of these following options:
+For DBMS you can choose one of these following options:
 - **Sqlite3** - You will not install anything for database if you choose this option, by default django will provide it for you.
 - **Postgresql v10.12** - **Recommended** for performance reason.
 
@@ -67,6 +67,8 @@ Follow all these instructions if this is the first time you pull/fork this repos
     DEBUG=
     ALLOWED_HOSTS=
     DBMS=
+    MEDIA_PATH=
+    AI_API_DOMAIN=
     DATABASE_NAME=
     DATABASE_USER=
     DATABASE_PASSWORD=
@@ -79,6 +81,8 @@ Follow all these instructions if this is the first time you pull/fork this repos
     DEBUG=True
     ALLOWED_HOSTS=locahost,127.0.0.1
     DBMS=POSTGRESQL
+    MEDIA_PATH=./media
+    AI_API_DOMAIN=http://localhost:2020
     DATABASE_NAME=cervicam
     DATABASE_USER=cervicam_user
     DATABASE_PASSWORD=password
@@ -91,18 +95,20 @@ Follow all these instructions if this is the first time you pull/fork this repos
     | Variable          | Optional    | Value                                                                             |
     |-------------------|-------------|-----------------------------------------------------------------------------------|
     | DEBUG             | No          | Either **1** or **0**                                                             |
-    | ALLOWED_HOSTS     | Yes         | List of allowed hosts and separated by comma, the default is '*' means all hosts  |
+    | ALLOWED_HOSTS     | Yes         | List of allowed hosts and separated by comma, the default is **'*'** means all hosts  |
     | DBMS              | Yes         | Either **SQLITE3** or **POSTGRESQL**, the default is **SQLITE3**                  |
+    | MEDIA_PATH        | Yes         | The path where model files/images will be stored, the default path is **./media** |
+    | AI_API_DOMAIN     | Yes         | URI of AI API, you can ignore it if you don't use the API                         |
     | DATABASE_NAME     | Yes         | Set targeted database, ensure you have created on your DBMS                       |
     | DATABASE_USER     | Yes         | User's name to access the database                                                |
     | DATABASE_PASSWORD | Yes         | User's password to access the database                                            |
     | DATABASE_HOST     | Yes         | The host of database server                                                       |
     | DATABASE_PORT     | Yes         | The port that used by the host                                                    |
 
-After you done, activate your local environment by following instructions that defined in [here](#activate-local-environment) and also you need to install all required packages by calling commands that defined in [here](#add-and-install-environment)
+After you done, activate your local environment by following instructions that defined in [here](#activate/deactivate-local-environment) and also you need to install all required packages by calling commands that defined in [here](#add-and-install-environment)
 
-## **Activate Local Environment**
-Before you jump to use all available commands on [usage](#usage), you need to activate a local environment first by calling this command in the root of repository:
+## **Activate/Deactivate Local Environment**
+Before you use all available commands on [usage](#usage), you need to activate a local environment first by calling this command in the root of repository:
 - Windows:
     ```bash
     env\Scripts\activate
@@ -112,8 +118,20 @@ Before you jump to use all available commands on [usage](#usage), you need to ac
     source env/bin/activate
     ```
 
+And if you need to close it, then run as easy as run terminated signal:
+- Windows/Unix:
+    ```bash
+    [CTRL + C]
+    ```
+
+or you can close it in gracefully way:
+- Windows/Unix:
+    ```bash
+    deactivate
+    ```
+
 ## **Add and Install Packages**
-Activate your local environment from [this section](#activate-local-environment) before add or install packages.
+Activate your local environment from [this section](#activate/deactivate-local-environment) before add or install packages.
 - Install all required packages from requirements.txt:
     ```bash
     pip install -r requirements.txt
@@ -130,7 +148,7 @@ Activate your local environment from [this section](#activate-local-environment)
     
 
 ## **Usage**
-Ensure you already activated the local environment from [this section](#activate-local-environment) before use all these useful commands:
+Ensure you already activated the local environment from [this section](#activate/deactivate-local-environment) before use all these useful commands:
 - Run application and will be hosted at **localhost:8000** by default
     ```bash
     python manage.py runserver
@@ -149,21 +167,21 @@ Ensure you already activated the local environment from [this section](#activate
     ```
 ## **API Documentation**
 - ### **Postman Collection**
-    The collection can be seen on this [site](https://documenter.getpostman.com/view/7487357/T1DmDyKV). If you use Postman, you can import the collection from that link. I recommend you to import it from Postman for better use and understanding rather than test it directly from your mobile application or web application. To use the environment variables on your local, take a look the example that exists on that site.
+    The collection can be seen on this [site](https://documenter.getpostman.com/view/7487357/T1DmDyKV). If you use Postman, you can import the collection from that link. We recommend you to import it from Postman for better use and understanding rather than test it directly from your mobile application or web application. To use the environment variables on your local, take a look the example that exists on that site.
 
 - ### **Authentication and Authorization**
-    In order to use all services, you need to have **Token for authentication** and **API Key for authorization**.
+    In order to use all services, you need to have **Token** and **API Key**. Basically, token is used to identify who you are. And before accessing all services, the server needs to know whether you have a permission to access the API or not, that's why we include API key as first layer security before token to identify your authorization.
     - ### **Token**
-        To get your token, you must exchange it by sending your account (username and password) to server, use *Get token request* on Postman to request that. Once you get the response with status code 200, you will see your token on response body. Take your token and put it on header as the following format:
+        To get your token, you must exchange it with your **username** and **password**, you can use *Get token request* on our Postman to request that. Once you get the response with status code 200, you will see your token on response body. Take your token and put it on header as the following format:
         ```
         Authorization: Token [YOUR_TOKEN]
         ```
-        In general type of request that needs token are:
-        **POST**, **UPDATE**, **DELETE**. But for POST requests, some of them are exceptional, e.g Token Request or Create user request that needs body request (POST type), but doesn't need token since you could use those requests anonymously.
+        In general, here are the list of requests that needs token:
+        **POST**, **UPDATE**, **DELETE**. But for POST requests, some of them are exceptional, e.g *Token Request* or *Create user request* that needs body request (POST type), but doesn't need a token since you can use those requests anonymously.
 
-        **Need to be noted**, if you use our Postman collections, you only need to provide username and password to send a token request, there is no need to set the token to header after have a OK response from server because our collections already setted it automatically for you after you get token.
+        **Need to be noted**, if you use our Postman collections, you only need to provide username and password to send a token request, there is no need to set the token to header after having a OK response from server because our collections already set it automatically for you after you get token.
     - ### **API Key**
-        For API key, you could generate it only once on admin page, and you must note the API key because you will have no chance to see it again after you refresh the page. Of course you can delete and create new one as you like, please use it wisely. Once you have your own API key, put it on your request header as the following format:
+        For API key, you can generate it only once on admin page, and you must note the API key because you will have no chance to see it again after you refresh the page or close the page. Of course you can delete and create new one as you like, but please use it wisely. Once you have your own API key, put it on your request header as the following format:
         ```
         Api-Key: [YOUR_API_KEY]
         ```
