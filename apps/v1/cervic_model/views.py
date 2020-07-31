@@ -1,3 +1,4 @@
+import requests
 from rest_framework.response import Response
 from django.conf import settings
 from asgiref.sync import async_to_sync
@@ -25,7 +26,7 @@ class ClassificationViewSet(viewsets.ModelViewSet):
 
         if serializer.is_valid():
             classification = serializer.save()
-            send_classification_request(classification)
+            send_classification_request(request, classification)
             return Response(serializer.data, status = status.HTTP_200_OK)
         else:
             return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
@@ -36,14 +37,15 @@ class ClassificationViewSet(viewsets.ModelViewSet):
     def partial_update(self, *args, **kwargs):
         return Response(status = status.HTTP_405_METHOD_NOT_ALLOWED)
 
-def send_classification_request(instance):
-    response = tools.fetch(
-        url = '{}/predict'.format(settings.APIS['AI']['DOMAIN']),
-        method = 'POST',
-        body = {
-            'image_url': settings.APIS['MAIN']['DOMAIN'] + instance.image.url,
-        }
-    )
+def send_classification_request(request, instance):
+    with open(instance.image.path, 'rb') as image:
+        response = requests.post(
+            '{}/predict'.format(settings.APIS['AI']['DOMAIN']),
+            files = {
+                # 'debug': 'heloo'
+                'image': image,
+            },
+        )
 
     print(response)
     

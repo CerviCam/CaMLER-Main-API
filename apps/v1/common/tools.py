@@ -1,26 +1,3 @@
-from urllib import parse
-from urllib.request import urlopen, Request
-import json
-
-def fetch(
-    url,
-    header = {},
-    body = {},
-    method = 'GET',
-):
-    header = {} if header == None else header
-    data = json.dumps(body).encode()
-    print(data)
-    return urlopen(Request(
-        url = url,
-        headers = {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.76 Safari/537.36',
-            **header,
-        },
-        data = data,
-        method = method,
-    )).read().decode()
-
 def get_user_or_none(request):
     if request.user.is_authenticated:
         account = request.user
@@ -28,3 +5,27 @@ def get_user_or_none(request):
         return user
     else:
         return None
+
+"""
+Deprecated function, feel free to uncomment if you want to modify/use it
+"""
+# from urllib.request import urlopen, Request
+# from requests_toolbelt import MultipartEncoder
+# def fetch(
+#     url,
+#     header = {},
+#     body = {},
+#     method = 'GET',
+# ):
+#     # data = json.dumps(body).encode()
+#     data = MultipartEncoder(fields = body)
+#     return urlopen(Request(
+#         url = url,
+#         headers = {
+#             'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.76 Safari/537.36',
+#             **header,
+#         },
+#         # files = files,
+#         data = data,
+#         method = method,
+#     )).read().decode()
