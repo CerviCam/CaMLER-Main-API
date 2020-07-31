@@ -70,6 +70,7 @@ class UserSerializer(serializers.ModelSerializer):
             "created_at",
             "updated_at",
             "name",
+            "gender",
             "account",
             "degree",
             "workplace",
@@ -114,3 +115,16 @@ class UserSerializer(serializers.ModelSerializer):
 
         instance.save()
         return instance
+
+    def to_representation(self, instance, *args, **kwargs):
+        representation = {
+            'gender': {
+                'code': instance.gender,
+                'label': instance.get_gender_display(),
+            }
+        }
+
+        return {
+            **super().to_representation(instance, *args, **kwargs),
+            **representation,
+        }

@@ -3,6 +3,7 @@ from apps.v1.common.models import BaseModel
 from django.db.models.signals import post_delete
 from django.dispatch import receiver
 from django.contrib.auth.models import User as DjangoUser
+from django.utils.translation import gettext_lazy as _
 
 # Create your models here.
 class Degree(BaseModel):
@@ -51,6 +52,17 @@ class User(BaseModel):
     )
 
     name = models.CharField(verbose_name = "Name", max_length = 255)
+    
+    class Gender(models.IntegerChoices):
+        UNKNOWN = 0, _('Unknown')
+        MALE = 1, _('Male')
+        FEMALE = 2, _('Female')
+    gender = models.IntegerField(
+        verbose_name= 'Gender',
+        choices = Gender.choices,
+        default = Gender.UNKNOWN,
+    )
+
     account = models.OneToOneField(
         DjangoUser,
         verbose_name = "Account",
