@@ -17,6 +17,22 @@ class ClassificationViewSet(viewsets.ModelViewSet):
     queryset = models.CervicClassification.objects.all()
     permission_classes = [HasAPIAccess, IsAuthenticated]
 
+    filterset_fields = (
+        'creator__id',
+        'creator__name',
+        'status',
+        'result',
+    )
+
+    ordering_fields = (
+        'creator__name',
+        'status',
+        'result',
+        'created_at',
+        'updated_at',
+    )
+    
+
     def get_queryset(self):
         user = tools.get_user_or_none(self.request)
         return models.CervicClassification.objects.filter(creator = user)
