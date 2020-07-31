@@ -7,8 +7,6 @@ class PlaceSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Place
         fields = (
-            "id",
-            "created_at",
             "updated_at",   
             "country",
             "province",
@@ -21,8 +19,6 @@ class DegreeSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Degree
         fields = (
-            "id",
-            "created_at",
             "updated_at",
             "instance_name",
             "name",
