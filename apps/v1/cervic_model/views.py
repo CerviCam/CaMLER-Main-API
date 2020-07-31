@@ -37,6 +37,9 @@ class ClassificationViewSet(viewsets.ModelViewSet):
     def partial_update(self, *args, **kwargs):
         return Response(status = status.HTTP_405_METHOD_NOT_ALLOWED)
 
+    def destroy(self, *args, **kwargs):
+        return Response(status = status.HTTP_405_METHOD_NOT_ALLOWED)
+
 def send_classification_request(request, instance):
     with open(instance.image.path, 'rb') as image:
         response = requests.post(
