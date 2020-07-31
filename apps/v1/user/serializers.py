@@ -33,14 +33,11 @@ class AccountSerializer(serializers.ModelSerializer):
         model = models.DjangoUser
         fields = (
             "username",
-            "is_staff",
+            "email",
             "is_active",
             "password",
         )
         extra_kwargs = {
-            "is_staff": {
-                "read_only": True
-            },
             "is_active": {
                 "read_only": True
             },
