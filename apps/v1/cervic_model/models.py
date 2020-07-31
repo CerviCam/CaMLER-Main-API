@@ -6,8 +6,6 @@ from django.db.models.signals import post_delete, pre_save
 from django.dispatch import receiver
 from django.utils import timezone
 
-import os
-
 from apps.v1.common.models import BaseModel
 from apps.v1.user.models import User
 
