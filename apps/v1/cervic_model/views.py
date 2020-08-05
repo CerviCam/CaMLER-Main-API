@@ -43,7 +43,7 @@ class ClassificationViewSet(viewsets.ModelViewSet):
         if serializer.is_valid():
             classification = serializer.save()
             send_classification_request(request, classification)
-            return Response(serializer.data, status = status.HTTP_200_OK)
+            return Response(serializer.data, status = status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
 
