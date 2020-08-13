@@ -172,4 +172,4 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 
 # Serve image or video files
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.getenv('MEDIA_PATH', os.path.join(BASE_DIR, 'media'))
+MEDIA_ROOT = os.getenv('STORAGE_PATH', os.path.join(BASE_DIR, '/media/'))

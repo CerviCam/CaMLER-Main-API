@@ -11,7 +11,7 @@ from apps.v1.user.models import User
 
 def set_image_path(instance, file_name):
     ext = file_name.split('.')[-1]
-    file_name = "images/{}.{}".format(timezone.now().strftime("%Y %m %d %H:%M:%S"), ext)
+    file_name = "classifications/{}.{}".format(timezone.now().strftime("%Y %m %d %H:%M:%S"), ext)
     return file_name
 
 # Create your models here.

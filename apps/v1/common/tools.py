@@ -1,3 +1,6 @@
+from shutil import move
+import os
+
 def get_user_or_none(request):
     if request.user.is_authenticated:
         account = request.user
@@ -5,6 +8,13 @@ def get_user_or_none(request):
         return user
     else:
         return None
+
+def move_file(old_path, new_path):
+    dirname = os.path.dirname(new_path)
+    if not os.path.exists(dirname):
+        os.makedirs(dirname)
+
+    move(old_path, new_path)
 
 """
 Deprecated function, feel free to uncomment if you want to modify/use it
