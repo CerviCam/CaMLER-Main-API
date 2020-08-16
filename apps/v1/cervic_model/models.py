@@ -1,8 +1,8 @@
 import os
-
+import requests
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from django.db.models.signals import post_delete, pre_save
+from django.db.models.signals import post_delete, pre_save, post_save
 from django.dispatch import receiver
 from django.conf import settings
 from django.core.exceptions import ValidationError
@@ -61,6 +61,23 @@ def pre_save_cervic_classification(sender, instance, *args, **kwargs):
             os.remove(old_image_path)
     except CervicClassification.DoesNotExist:
         pass
+
+@receiver(post_save, sender=CervicClassification)
+def post_save_cervic_classification(sender, instance, *args, **kwargs):
+    # Send classification request to AI API
+    with open(instance.image.path, 'rb') as image:
+        response = requests.post(
+            '{}/predict'.format(settings.APIS['AI']['DOMAIN']),
+            files = {
+                # 'debug': 'heloo'
+                'image': image,
+            },
+        )
+
+    print(response)
+    
+    instance.status = CervicClassification.Status.DONE
+    instance.save()
 
 def get_ai_model_name(instance, file_name):
     if instance.is_chosen:

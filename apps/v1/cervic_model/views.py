@@ -1,4 +1,3 @@
-import requests
 from rest_framework.response import Response
 from django.conf import settings
 from asgiref.sync import async_to_sync
@@ -41,8 +40,7 @@ class ClassificationViewSet(viewsets.ModelViewSet):
         serializer = serializers.CervicSerializer(data = request.data, context = {'request': request})
 
         if serializer.is_valid():
-            classification = serializer.save()
-            send_classification_request(request, classification)
+            serializer.save()
             return Response(serializer.data, status = status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
@@ -55,19 +53,4 @@ class ClassificationViewSet(viewsets.ModelViewSet):
 
     def destroy(self, *args, **kwargs):
         return Response(status = status.HTTP_405_METHOD_NOT_ALLOWED)
-
-def send_classification_request(request, instance):
-    with open(instance.image.path, 'rb') as image:
-        response = requests.post(
-            '{}/predict'.format(settings.APIS['AI']['DOMAIN']),
-            files = {
-                # 'debug': 'heloo'
-                'image': image,
-            },
-        )
-
-    print(response)
-    
-    instance.status = models.CervicClassification.Status.DONE
-    instance.save()
         
