@@ -64,20 +64,33 @@ def pre_save_cervic_classification(sender, instance, *args, **kwargs):
 
 @receiver(post_save, sender=CervicClassification)
 def post_save_cervic_classification(sender, instance, *args, **kwargs):
-    # Send classification request to AI API
-    with open(instance.image.path, 'rb') as image:
-        response = requests.post(
-            '{}/predict'.format(settings.APIS['AI']['DOMAIN']),
-            files = {
-                # 'debug': 'heloo'
-                'image': image,
-            },
-        )
+    # Don't send a request if had been classified before
+    if instance.status == CervicClassification.Status.DONE:
+        return
 
-    print(response)
-    
-    instance.status = CervicClassification.Status.DONE
-    instance.save()
+    try:
+        # Send classification request to AI API
+        with open(instance.image.path, 'rb') as image:
+            response = requests.post(
+                '{}/predict'.format(settings.APIS['AI']['DOMAIN']),
+                files = {
+                    # 'debug': 'heloo'
+                    'image': image,
+                },
+            )
+        instance.status = CervicClassification.Status.DONE
+        
+        payload = response.json()
+        if payload['result']['code'] == 0:
+            instance.result = CervicClassification.Result.NEGATIVE
+        elif payload['result']['code'] == 1:
+            instance.result = CervicClassification.Result.POSITIVE
+        else:
+            instance.result = CervicClassification.Result.UNKNOWN
+    except Exception:
+        instance.result = CervicClassification.Result.UNKNOWN
+    finally:
+        instance.save()
 
 def get_ai_model_name(instance, file_name):
     if instance.is_chosen:
