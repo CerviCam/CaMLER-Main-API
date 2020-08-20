@@ -81,9 +81,9 @@ def post_save_cervic_classification(sender, instance, *args, **kwargs):
         instance.status = CervicClassification.Status.DONE
         
         payload = response.json()
-        if payload['result']['code'] == 0:
+        if payload['class'] == 0:
             instance.result = CervicClassification.Result.NEGATIVE
-        elif payload['result']['code'] == 1:
+        elif payload['class'] == 1:
             instance.result = CervicClassification.Result.POSITIVE
         else:
             instance.result = CervicClassification.Result.UNKNOWN
