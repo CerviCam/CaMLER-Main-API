@@ -113,10 +113,6 @@ class AIModel(models.Model):
                 regex='^\w+$',
                 message='Must contain at least one of alphanumeric or underscore characters',
             ),
-            RegexValidator(
-                regex='^(?!.*((?i)chosen)).*',
-                message='You can\'t name the model starts with "chosen"',
-            ),
         ]
     )
     model = models.FileField(
