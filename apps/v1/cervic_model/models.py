@@ -149,7 +149,7 @@ class AIModel(models.Model):
                         ai_model.is_chosen = False
                         ai_model.save()
 
-            if old_instance.is_chosen != self.is_chosen:
+            if old_instance.model.path != self.model.path or old_instance.is_chosen != self.is_chosen:
                 config_path = os.path.join(settings.MEDIA_ROOT, "models/.config.json")
                 
                 # Create config file if doesn't exist
@@ -157,7 +157,6 @@ class AIModel(models.Model):
                     with open(config_path, 'w') as config_file:
                         config_file.write("{}")
 
-                config = dict()
                 with open(config_path, 'r+') as config_file:
                     config = json.load(config_file)
 
