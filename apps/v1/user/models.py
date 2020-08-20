@@ -54,9 +54,9 @@ class User(BaseModel):
     name = models.CharField(verbose_name = "Name", max_length = 255)
     
     class Gender(models.IntegerChoices):
-        UNKNOWN = 0, _('Unknown')
-        MALE = 1, _('Male')
-        FEMALE = 2, _('Female')
+        MALE = 0, _('Male')
+        FEMALE = 1, _('Female')
+        UNKNOWN = 99, _('Unknown')
     gender = models.IntegerField(
         verbose_name= 'Gender',
         choices = Gender.choices,
