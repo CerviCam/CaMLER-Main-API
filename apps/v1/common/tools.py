@@ -11,6 +11,13 @@ def get_user_or_none(request):
     else:
         return None
 
+def get_object_or_none(model, *args, **kwargs):
+    try:
+        object = model.objects.get(*args, **kwargs)
+    except model.DoesNotExist:
+        return None
+    return object
+
 def move_file(old_path, new_path):
     dirname = os.path.dirname(new_path)
     if not os.path.exists(dirname):
