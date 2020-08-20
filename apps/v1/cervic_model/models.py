@@ -1,5 +1,6 @@
 import os
 import requests
+import json
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.db.models.signals import post_delete, pre_save, post_save
@@ -92,13 +93,8 @@ def post_save_cervic_classification(sender, instance, *args, **kwargs):
         instance.save()
 
 def get_ai_model_name(instance, file_name):
-    if instance.is_chosen:
-        prefix = "chosen_"
-    else:
-        prefix = ""
-
     ext = file_name.split('.')[-1]
-    return os.path.join("models/", "{}{}.{}".format(prefix, instance.name, ext))
+    return os.path.join("models/", "{}.{}".format(instance.name, ext))
 
 def rename_model_name(instance, new_name):
     return rename_file_name(
@@ -144,22 +140,37 @@ class AIModel(models.Model):
             if old_instance.name != self.name and os.path.exists(self.model.path):
                 rename_model_name(self, self.name)
 
+            if self.is_chosen and old_instance.is_chosen != self.is_chosen:
+                config_path = os.path.join(settings.MEDIA_ROOT, "models/.config.json")
+                
+                # Create config file if doesn't exist
+                if not os.path.exists(config_path):
+                    with open(config_path, 'w') as config_file:
+                        config_file.write("{}")
+
+                config = dict()
+                with open(config_path, 'r+') as config_file:
+                    config = json.load(config_file)
+
+                    # Choose this model
+                    config["chosen"] = os.path.basename(self.model.path)
+                
+                    # Save new configuration
+                    config_file.seek(0)
+                    json.dump(config, config_file, indent=4)
+
+                    # Remove remaining parts
+                    config_file.truncate()
+
+                # Make sure only one object has is_chosen value to be True
+                for ai_model in AIModel.objects.all():
+                    if ai_model.is_chosen and self != ai_model:
+                        ai_model.is_chosen = False
+                        ai_model.save()
+                        
         except AIModel.DoesNotExist:
             pass
 
-        # Make sure only one object has is_chosen value to be True or none of AI models have that
-        if self.is_chosen and "chosen" not in self.model.name:
-            if os.path.exists(self.model.path):
-                rename_model_name(self, "chosen_{}".format(self.name))
-
-            for ai_model in AIModel.objects.all():
-                if ai_model.is_chosen and self != ai_model:
-                    rename_model_name(ai_model, self.name)
-                    ai_model.is_chosen = False
-                    ai_model.save()
-        elif not self.is_chosen and self.name not in self.model.name:
-            if os.path.exists(self.model.path):
-                rename_model_name(self, self.name)
                 
         super().save(*args, **kwargs)
 
@@ -183,6 +194,7 @@ def pre_save_ai_model(sender, instance, *args, **kwargs):
 
 @receiver(post_delete, sender = AIModel)
 def post_delete_ai_model(sender, instance, *args, **kwargs):
+    # Delete model file to free space
     model_path = instance.model.path
     if os.path.isfile(model_path):
         os.remove(model_path)
