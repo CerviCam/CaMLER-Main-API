@@ -57,12 +57,7 @@ def pre_save_cervic_classification(sender, instance, *args, **kwargs):
     except CervicClassification.DoesNotExist:
         pass
 
-@receiver(post_save, sender=CervicClassification)
-def post_save_cervic_classification(sender, instance, *args, **kwargs):
-    # Don't send a request if had been classified before
-    if instance.status == CervicClassification.Status.DONE:
-        return
-
+def classify_instance(instance):
     try:
         # Send classification request to AI API
         with open(instance.image.path, 'rb') as image:
@@ -85,6 +80,14 @@ def post_save_cervic_classification(sender, instance, *args, **kwargs):
         instance.result = CervicClassification.Result.UNKNOWN
     finally:
         instance.save()
+
+@receiver(post_save, sender=CervicClassification)
+def post_save_cervic_classification(sender, instance, *args, **kwargs):
+    # Don't send a request if had been classified before
+    if instance.status == CervicClassification.Status.DONE:
+        return
+
+    classify_instance(instance)
 
 def get_ai_model_name(instance, file_name):
     ext = file_name.split('.')[-1]
