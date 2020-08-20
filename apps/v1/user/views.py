@@ -64,12 +64,6 @@ class UserViewSet(viewsets.ModelViewSet):
             return super().destroy(request, *args, **kwargs)
         else:
             return Response(status = status.HTTP_403_FORBIDDEN)
-
-
-@receiver(post_save, sender=settings.AUTH_USER_MODEL)
-def create_auth_token(sender, instance = None, created = False, **kwargs):
-    if created and instance != None:
-        Token.objects.create(user = instance)
     
     
     
