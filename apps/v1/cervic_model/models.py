@@ -12,6 +12,7 @@ from django.core.validators import RegexValidator, FileExtensionValidator
 from apps.v1.common.models import BaseModel
 from apps.v1.user.models import User
 from apps.v1.common.tools import DefaultFileNameFormat, move_file, rename_file_name
+from datetime import datetime
 
 # Create your models here.
 class CervicClassification(BaseModel):
@@ -35,13 +36,6 @@ class CervicClassification(BaseModel):
         choices = Result.choices,
         default = Result.UNCLASSIFIED,
     )
-
-    def __str__(self):
-        identity_name = os.path.basename(self.image.url)
-        if self.creator != None:
-            identity_name = self.creator.name
-
-        return "{} [{}] [{}]".format(identity_name, self.get_status_display(), self.get_result_display())
 
 @receiver(post_delete, sender = CervicClassification)
 def post_delete_cervic_classification(sender, instance, *args, **kwargs):
@@ -122,11 +116,6 @@ class AIModel(models.Model):
         ]
     )
     is_chosen = models.BooleanField(default=False)
-
-    def __str__(self):
-        if self.is_chosen:
-            return "{} [CHOSEN]".format(self.name)
-        return self.name
 
     def save(self, *args, **kwargs):
         try:
