@@ -74,7 +74,6 @@ def post_save_cervic_classification(sender, instance, *args, **kwargs):
             response = requests.post(
                 '{}/predict'.format(settings.APIS['AI']['DOMAIN']),
                 files = {
-                    # 'debug': 'heloo'
                     'image': image,
                 },
             )
