@@ -37,6 +37,13 @@ class CervicClassification(BaseModel):
         default = Result.UNCLASSIFIED,
     )
 
+    def __str__(self):
+        identity_name = self.image.name
+        if self.creator != None:
+            identity_name = self.creator.name
+        
+        return identity_name
+
 @receiver(post_delete, sender = CervicClassification)
 def post_delete_cervic_classification(sender, instance, *args, **kwargs):
     if instance == None: return
@@ -119,6 +126,9 @@ class AIModel(models.Model):
         ]
     )
     is_chosen = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.name
 
     def save(self, *args, **kwargs):
         try:
