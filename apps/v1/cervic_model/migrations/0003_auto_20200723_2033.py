@@ -14,6 +14,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='cervicclassification',
             name='image',
-            field=models.ImageField(upload_to=apps.v1.common.tools.get_default_file_name_format),
+            field=models.ImageField(upload_to=apps.v1.common.tools.DefaultFileNameFormat("classifications")),
         ),
     ]

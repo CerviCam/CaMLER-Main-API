@@ -16,7 +16,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(max_length=100, unique=True)),
-                ('model', models.FileField(upload_to=apps.v1.cervic_model.models.get_default_file_name_format)),
+                ('model', models.FileField(upload_to=apps.v1.cervic_model.models.DefaultFileNameFormat(prefix="classifications"))),
                 ('is_chosen', models.BooleanField(default=False)),
             ],
         ),

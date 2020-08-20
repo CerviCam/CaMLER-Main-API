@@ -10,12 +10,12 @@ from django.core.validators import RegexValidator, FileExtensionValidator
 
 from apps.v1.common.models import BaseModel
 from apps.v1.user.models import User
-from apps.v1.common.tools import get_default_file_name_format, move_file, rename_file_name
+from apps.v1.common.tools import DefaultFileNameFormat, move_file, rename_file_name
 
 # Create your models here.
 class CervicClassification(BaseModel):
     creator = models.ForeignKey(User, on_delete = models.SET_NULL, null = True)
-    image = models.ImageField(upload_to = get_default_file_name_format("classifications"))
+    image = models.ImageField(upload_to = DefaultFileNameFormat(prefix="classifications"))
     
     class Status(models.IntegerChoices):
         WAITING = 0, _('Waiting')
@@ -26,10 +26,10 @@ class CervicClassification(BaseModel):
     )
 
     class Result(models.IntegerChoices):
-        UNCLASSIFIED = 0, _('Unclassified')
-        NEGATIVE = 1, _('Negative')
-        POSITIVE = 2, _('Positive')
-        UNKNOWN = 3, _('Unknown')
+        NEGATIVE = 0, _('Negative')
+        POSITIVE = 1, _('Positive')
+        UNKNOWN = 98, _('Unknown')
+        UNCLASSIFIED = 99, _('Unclassified')
     result = models.IntegerField(
         choices = Result.choices,
         default = Result.UNCLASSIFIED,

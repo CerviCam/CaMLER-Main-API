@@ -1,6 +1,7 @@
 from shutil import move
 import os
 from django.utils import timezone
+from django.utils.deconstruct import deconstructible
 
 def get_user_or_none(request):
     if request.user.is_authenticated:
@@ -35,19 +36,27 @@ def rename_file_name(instance, field_name, new_name, should_save=True):
     
     return instance
 
-def get_default_file_name_format(prefix="", suffix=""):
-    def get_date_format(instance, file_name):
+def get_date_format(instance, file_name):
         ext = file_name.split('.')[-1]
+        file_name = "{}.{}".format(timezone.now().strftime("%Y %m %d %H:%M:%S"), ext)
+        return file_name
+
+@deconstructible
+class DefaultFileNameFormat(object):
+    def __init__(self, prefix="", suffix=""):
+        self.prefix = prefix
+        self.suffix = suffix
+
+    def __call__(self, instance, filename):
         file_name = os.path.join(
-            prefix,
-            "{}.{}".format(timezone.now().strftime("%Y %m %d %H:%M:%S"), ext),
-            suffix,
+            self.prefix,
+            get_date_format(instance, filename),
+            self.suffix,
         )
 
         if file_name.endswith('/'):
             return file_name[:-1]
         return file_name
-    return get_date_format
 
 """
 Deprecated function, feel free to uncomment if you want to modify/use it
