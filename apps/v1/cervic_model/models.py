@@ -140,7 +140,16 @@ class AIModel(models.Model):
             if old_instance.name != self.name and os.path.exists(self.model.path):
                 rename_model_name(self, self.name)
 
-            if self.is_chosen and old_instance.is_chosen != self.is_chosen:
+            no_one_is_chosen = True
+            if self.is_chosen:
+                # Make sure only one object has is_chosen value to be True
+                for ai_model in AIModel.objects.all():
+                    if ai_model.is_chosen and self != ai_model:
+                        no_one_is_chosen = False
+                        ai_model.is_chosen = False
+                        ai_model.save()
+
+            if old_instance.is_chosen != self.is_chosen:
                 config_path = os.path.join(settings.MEDIA_ROOT, "models/.config.json")
                 
                 # Create config file if doesn't exist
@@ -152,8 +161,11 @@ class AIModel(models.Model):
                 with open(config_path, 'r+') as config_file:
                     config = json.load(config_file)
 
-                    # Choose this model
-                    config["chosen"] = os.path.basename(self.model.path)
+                    # Choose this model if chosen
+                    if self.is_chosen:
+                        config["chosen"] = os.path.basename(self.model.path)
+                    elif no_one_is_chosen:
+                        config["chosen"] = None
                 
                     # Save new configuration
                     config_file.seek(0)
@@ -162,11 +174,6 @@ class AIModel(models.Model):
                     # Remove remaining parts
                     config_file.truncate()
 
-                # Make sure only one object has is_chosen value to be True
-                for ai_model in AIModel.objects.all():
-                    if ai_model.is_chosen and self != ai_model:
-                        ai_model.is_chosen = False
-                        ai_model.save()
                         
         except AIModel.DoesNotExist:
             pass
