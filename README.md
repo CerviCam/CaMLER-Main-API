@@ -1,5 +1,5 @@
 # CerviCam - Main API
-This API is used as the main service of CerviCam apps and also as the only one gateway for our other services that's not implemented in here. The core is built by RESTful API and Django framework.
+As main services of CerviCam app and the only gateway to accesing all services, which mean all outside-requests must be going through this API for any CerviCam services, including AI service. The core is built by Django and python as its language. The API Gateway is built by REST architecture.
 
 ## **Table of Contents**
 - [Prerequisites](#prerequisites)
@@ -167,26 +167,26 @@ Ensure you already activated the local environment from [this section](#activate
     ```
 ## **API Documentation**
 - ### **Postman Collection**
-    The collection can be seen on this [site](https://documenter.getpostman.com/view/7487357/T1DmDyKV). If you use Postman, you can import the collection from that link. We recommend you to import it from Postman for better use and understanding rather than test it directly from your mobile application or web application. To use the environment variables on your local, take a look the example that exists on that site.
+    The collection can be seen on this [site](https://documenter.getpostman.com/view/7487357/T1DmDyKV). If you use Postman, you can import the collection from that link. We recommend you to import it from Postman for better use and understanding instead of test it directly from your mobile application or web application. To use the environment variables on your local, take a look the example that exists on that site.
 
 - ### **Authentication and Authorization**
-    In order to use all services, you need to have **Token** and **API Key**. Basically, token is used to identify who you are. And before accessing all services, the server needs to know whether you have a permission to access the API or not, that's why we include API key as first layer security before token to identify your authorization.
+    In order to use all services, you need to have **Token** and **API Key**. Basically, token is used to identify who you are. And before accessing all services, the server needs to know whether you have a permission to access the API or not, that's why we require you to send API key as well before token to identify your authorization.
     - ### **Token**
-        To get your token, you must exchange it with your **username** and **password**, you can use *Get token request* on our Postman to request that. Once you get the response with status code 200, you will see your token on response body. Take your token and put it on header as the following format:
+        To get your token, you must exchange it with your **username** and **password**, you can use *Get token request* on our Postman to request that. Once you get the response with status code 200, you will see your token on response body. Take your token and put it to header as the following format:
         ```
         Authorization: Token [YOUR_TOKEN]
         ```
         In general, here are the list of requests that needs token:
         **POST**, **UPDATE**, **DELETE**. But for POST requests, some of them are exceptional, e.g *Token Request* or *Create user request* that needs body request (POST type), but doesn't need a token since you can use those requests anonymously.
 
-        **Need to be noted**, if you use our Postman collections, you only need to provide username and password to send a token request, there is no need to set the token to header after having a OK response from server because our collections already set it automatically for you after you get token.
+        **Notable**, if you use our Postman collections, you only need to provide username and password to send a token request, there is no need to set the token to header after having a OK response from server because our collections already set it automatically for you after you get token.
     - ### **API Key**
         For API key, you can generate it only once on admin page, and you must note the API key because you will have no chance to see it again after you refresh the page or close the page. Of course you can delete and create new one as you like, but please use it wisely. Once you have your own API key, put it on your request header as the following format:
         ```
         Api-Key: [YOUR_API_KEY]
         ```
 
-        **Need to be noted**, you definitely must provide API Key on your request header for any services you want to use.
+        **Notable**, you definitely must provide API Key on your request header for any services you want to use.
 
 
 ## **Troubleshootings**
